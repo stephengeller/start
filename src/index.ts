@@ -51,9 +51,13 @@ please type out the script you'd like to use`)
           `${choice} is not in list, please choose another`
         )
       }
+    } else if (viableFiles.length === 0) {
+      this.error("No files found.")
     } else {
       choice = viableFiles[0]
     }
+
+    this.log(dir, choice)
 
     const choiceWithPath = path.join(dir, choice)
 
