@@ -19,7 +19,7 @@ $ npm install -g start
 $ start COMMAND
 running command...
 $ start (-v|--version|version)
-start/0.0.0 darwin-x64 node-v12.18.1
+start/0.1.0 darwin-x64 node-v12.18.1
 $ start --help [COMMAND]
 USAGE
   $ start COMMAND

@@ -1,7 +1,7 @@
 {
   "name": "start",
   "description": "Single CLI entrypoint to all your apps!",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "Stephen Geller @stephengeller",
   "bin": {
     "start": "./bin/run"
