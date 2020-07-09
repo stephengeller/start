@@ -15,7 +15,7 @@ class Start extends Command {
     force: flags.boolean({ char: "f" }),
   }
 
-  static args = [{ name: "directory" }]
+  static args = [{ name: "directory", required: false }]
 
   async run() {
     const { args, flags } = this.parse(Start)
