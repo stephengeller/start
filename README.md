@@ -15,11 +15,11 @@ Single CLI entrypoint to all your apps!
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g start
+$ npm install -g @stephengeller/start
 $ start COMMAND
 running command...
 $ start (-v|--version|version)
-start/0.1.0 darwin-x64 node-v12.18.1
+@stephengeller/start/0.1.0 darwin-x64 node-v12.18.1
 $ start --help [COMMAND]
 USAGE
   $ start COMMAND
