@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "oclif",
+    "oclif-typescript"
+  ],
+  "rules": {
+    "quotes": "off",
+    "object-curly-spacing": "off",
+    "operator-linebreak": "off",
+    "array-callback-return": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-implicit-any": "off"
+  }
+}
