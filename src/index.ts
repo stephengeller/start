@@ -12,16 +12,19 @@ class Start extends Command {
     version: flags.version({ char: "v" }),
     help: flags.help({ char: "h" }),
     // flag with no value (-f, --force)
-    force: flags.boolean({ char: "f" }),
+    directory: flags.string({ char: "d", required: false }),
+    dryRun: flags.boolean({ char: "i", required: false }),
   }
 
-  static args = [{ name: "directory", required: false }]
+  static args = [{ name: "arguments", required: false }]
+
+  static strict = false
 
   async run() {
     const { args, flags } = this.parse(Start)
-    const dir = path.join(process.cwd(), args.directory ?? "")
+    const dir = path.join(process.cwd(), flags.directory ?? "")
 
-    const subdirs = ["scripts", "script", "dev/script", "dev/scripts"]
+    const subdirs = [".", "scripts", "script", "dev/script", "dev/scripts"]
     const scriptNames = ["start", "dev-start"]
     const scriptExtensions = ["sh"]
     const scripts: string[] = scriptNames.concat(
@@ -57,15 +60,21 @@ please type out the script you'd like to use`)
       choice = viableFiles[0]
     }
 
-    this.log(dir, choice)
-
     const choiceWithPath = path.join(dir, choice)
 
-    this.log(`Running script: ${choiceWithPath}\n`)
-    process.chdir(path.dirname(choiceWithPath))
-    const spawnedProcess = spawn(choiceWithPath, [], { stdio: "inherit" })
-    spawnedProcess.on("exit", code => this.log(`\nDone with exit code ${code}`))
-    process.chdir(__dirname)
+    if (flags.dryRun) {
+      this.log(`Would run script: ${choiceWithPath}\n`)
+    } else {
+      this.log(`Running script: ${choiceWithPath}\n`)
+      process.chdir(path.dirname(choiceWithPath))
+      const spawnedProcess = spawn(choiceWithPath, this.argv, {
+        stdio: "inherit",
+      })
+      spawnedProcess.on("exit", code =>
+        this.log(`\nDone with exit code ${code}`)
+      )
+      process.chdir(__dirname)
+    }
   }
 }
 
