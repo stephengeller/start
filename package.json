@@ -13,12 +13,14 @@
     "@oclif/plugin-help": "^3",
     "@types/cross-spawn": "^6.0.2",
     "cli-ux": "^5.4.9",
+    "inquirer": "^7.3.2",
     "tslib": "^1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
     "@types/chai": "^4",
+    "@types/inquirer": "^6.5.0",
     "@types/mocha": "^5",
     "@types/node": "^10",
     "chai": "^4",
@@ -51,6 +53,7 @@
   "scripts": {
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev readme",
+    "readme": "oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },

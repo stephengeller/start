@@ -3,6 +3,7 @@ import cli from "cli-ux"
 import * as path from "path"
 import * as fs from "fs"
 import * as spawn from "cross-spawn"
+import * as inquirer from "inquirer"
 
 class Start extends Command {
   static description = "Start your repository!"
@@ -16,13 +17,16 @@ class Start extends Command {
     dryRun: flags.boolean({ char: "i", required: false }),
   }
 
-  static args = [{ name: "arguments", required: false }]
-
   static strict = false
 
   async run() {
-    const { args, flags } = this.parse(Start)
-    const dir = path.join(process.cwd(), flags.directory ?? "")
+    const { flags } = this.parse(Start)
+
+    // TODO: Make this work with absolute paths
+    const dir =
+      flags.directory && path.isAbsolute(flags.directory)
+        ? flags.directory
+        : path.join(process.cwd(), flags.directory ?? "")
 
     const subdirs = [".", "scripts", "script", "dev/script", "dev/scripts"]
     const scriptNames = ["start", "dev-start"]
@@ -33,10 +37,15 @@ class Start extends Command {
 
     const viableFiles: string[] = []
     subdirs.map(subdir => {
-      const subdirPath = path.join(dir, subdir)
+      const subdirPath =
+        flags.directory && path.isAbsolute(flags.directory)
+          ? flags.directory
+          : path.join(dir, subdir)
+      console.log(subdirPath)
       try {
         fs.readdirSync(subdirPath).map(file => {
           if (scripts.includes(file)) {
+            console.log(file, "is match")
             viableFiles.push(path.join(subdir, file))
           }
         })
@@ -46,14 +55,15 @@ class Start extends Command {
     let choice
 
     if (viableFiles.length > 1) {
-      this.log(JSON.stringify(viableFiles, null, 2))
-      choice = await cli.prompt(`We have ${viableFiles.length} available scripts,
-please type out the script you'd like to use`)
-      while (!viableFiles.includes(choice)) {
-        choice = await cli.prompt(
-          `${choice} is not in list, please choose another`
-        )
-      }
+      const responses: any = await inquirer.prompt([
+        {
+          name: "script",
+          message: "select a script",
+          type: "list",
+          choices: viableFiles.map(f => path.join(dir, f)),
+        },
+      ])
+      choice = responses.script
     } else if (viableFiles.length === 0) {
       this.error("No files found.")
     } else {
